@@ -23,16 +23,10 @@
 
       <v-spacer></v-spacer>
 
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
+      <v-btn v-if="isShowLogout" @click="handleClickLogout()" text>
+        <span class="mr-2">ログアウト</span>
       </v-btn>
     </v-app-bar>
-
     <v-main>
       <router-view />
     </v-main>
@@ -42,10 +36,18 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
+import LoginModule from "@/store/modules/login";
 
 @Component({
   name: "app",
   components: {},
 })
-export default class extends Vue {}
+export default class extends Vue {
+  get isShowLogout(): boolean {
+    return this.$route.path !== "/";
+  }
+  handleClickLogout(): void {
+    LoginModule.Logout();
+  }
+}
 </script>

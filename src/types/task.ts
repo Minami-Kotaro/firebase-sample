@@ -1,6 +1,7 @@
 export interface TaskDisplay {
   id: string;
   task: string;
+  assigneeId: string;
   assignee: string;
 }
 

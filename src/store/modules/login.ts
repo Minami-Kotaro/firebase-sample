@@ -8,6 +8,8 @@ import {
   getModule,
 } from "vuex-module-decorators";
 import store from "..";
+import { signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { auth } from "@/firebase";
 
 @Module({ dynamic: true, store, name: "LoginModule", namespaced: true })
 class LoginModule extends VuexModule {
@@ -26,9 +28,28 @@ class LoginModule extends VuexModule {
     this.SET_LOGIN_FORM(data);
   }
   @Action({ rawError: true })
-  Login() {
-    console.log("login");
-    router.push("/todo");
+  Login(loginForm: LoginForm) {
+    const { mail, password } = loginForm;
+    signInWithEmailAndPassword(auth, mail, password)
+      .then((userCredential) => {
+        console.log("ok");
+        console.log(userCredential);
+        router.push("/todo");
+      })
+      .catch((error) => {
+        alert(error.code + error.message);
+      });
+  }
+  @Action({ rawError: true })
+  Logout() {
+    signOut(auth)
+      .then(() => {
+        console.log("signout");
+        router.push("/");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 }
 

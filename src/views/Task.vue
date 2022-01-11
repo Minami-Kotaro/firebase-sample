@@ -15,8 +15,15 @@
         class="pa-4"
         v-model="assignee"
         hide-details
+        return-object
       ></v-select>
-      <v-btn color="primary" dark class="pa-4" @click="addTask()">追加</v-btn>
+      <v-btn
+        color="primary"
+        class="pa-4"
+        :disabled="isDisabledAddButton"
+        @click="addTask()"
+        >追加</v-btn
+      >
     </div>
     <div>
       <v-row class="sub-header align-center px-4">
@@ -30,7 +37,7 @@
           <v-col class="col-6 px-4">{{ task.task }}</v-col>
           <v-col class="col-6 px-4 d-flex align-center justify-space-between"
             >{{ task.assignee }}
-            <v-btn fab dark x-small color="red" @click="deleteTask()">
+            <v-btn fab dark x-small color="red" @click="deleteTask(task)">
               <v-icon dark>mdi-delete</v-icon>
             </v-btn>
           </v-col>
@@ -58,21 +65,30 @@ export default class extends Vue {
   get assignees(): Assignee[] {
     return TaskModule.assignees;
   }
-  get assignee(): Assignee | undefined {
+  get assignee(): Assignee | null {
     return TaskModule.inputAssignee;
   }
-  set assignee(data: Assignee | undefined) {
-    if (data !== undefined) TaskModule.SelectAssignee(data);
+  set assignee(data: Assignee | null) {
+    if (data !== null) TaskModule.SelectAssignee(data);
   }
   get tasks(): TaskDisplay[] {
     return TaskModule.tasks;
   }
+  get isDisabledAddButton(): boolean {
+    return !TaskModule.inputTask || !TaskModule.inputAssignee;
+  }
 
   addTask(): void {
-    TaskModule.AddTask();
+    if (this.assignee !== null) {
+      TaskModule.AddTask({ task: this.task, assignee: this.assignee });
+    }
   }
-  deleteTask(): void {
-    TaskModule.DeleteTask();
+  deleteTask(task: TaskDisplay): void {
+    TaskModule.DeleteTask(task);
+  }
+
+  created(): void {
+    TaskModule.GetInitialValue();
   }
 }
 </script>

@@ -60,7 +60,7 @@ export default class extends Vue {
   }
 
   handleClickLogin(): void {
-    LoginModule.Login();
+    LoginModule.Login(LoginModule.loginForm);
   }
 }
 </script>
