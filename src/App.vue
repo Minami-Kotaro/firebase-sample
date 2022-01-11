@@ -41,12 +41,11 @@
 
 <script lang="ts">
 import Vue from "vue";
+import Component from "vue-class-component";
 
-export default Vue.extend({
-  name: "App",
-
-  data: () => ({
-    //
-  }),
-});
+@Component({
+  name: "app",
+  components: {},
+})
+export default class extends Vue {}
 </script>
